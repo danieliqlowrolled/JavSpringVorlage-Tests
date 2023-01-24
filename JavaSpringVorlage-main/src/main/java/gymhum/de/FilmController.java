@@ -18,9 +18,9 @@ public class FilmController {
 
     public FilmController(){
         setFilme(new ArrayList<>());
-        getFilme().add(new Film("Avatar", 12, 120));
-        getFilme().add(new Film("Pirates of the Carribean", 16, 110));
-        getFilme().add(new Film("Matrix", 12, 90));
+        getFilme().add(new Film("Wall E", 0, 130));
+        getFilme().add(new Film("Fight Club", 18, 120));
+        getFilme().add(new Film("Deadpool", 16, 110));
     }
 
     public void removeFilm(Film film){
