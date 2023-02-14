@@ -1,1 +1,40 @@
 <h4>4 Gewinnt</h4>
+<hr>
+<table class="table table-bordered">
+    <thead>
+
+        <tr>
+            <th scope="col">
+                <a class="btn btn-outline-primary" role="button" th:href="@{/addstein(id=${0})}">Einsetzen</a>
+            </th>
+            <th scope="col">
+                <a class="btn btn-outline-primary" role="button" th:href="@{/addstein(id=${1})}">Einsetzen</a>
+            </th>
+            <th scope="col">
+                <a class="btn btn-outline-primary" role="button" th:href="@{/addstein(id=${2})}">Einsetzen</a>
+            </th>
+            <th scope="col">
+                <a class="btn btn-outline-primary" role="button" th:href="@{/addstein(id=${3})}">Einsetzen</a>
+            </th>
+            <th scope="col">
+                <a class="btn btn-outline-primary" role="button" th:href="@{/addstein(id=${4})}">Einsetzen</a>
+            </th>
+            <th scope="col">
+                <a class="btn btn-outline-primary" role="button" th:href="@{/addstein(id=${5})}">Einsetzen</a>
+            </th>
+            <th scope="col">
+                <a class="btn btn-outline-primary" role="button" th:href="@{/addstein(id=${6})}">Einsetzen</a>
+            </th>  
+        </tr>
+        
+        <tr th:each="feld, counter: ${felder}">
+            <td th:each="f, counter: ${feld}">
+                <span th:if="${f.getIstFrei()}==true"> </span>
+    
+                <span th:unless="${f.getIstFrei()}==true">
+                    <span th:if="${f.getZustand()}==true">O</span>
+                    <span th:unless="${f.getZustand()}==true">X</span>
+                </span>
+            </td>
+        </tr>
+    </thead>

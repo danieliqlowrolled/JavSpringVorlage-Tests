@@ -6,25 +6,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import gymhum.de.model.Feld;
+import gymhum.de.model.Spieler;
 
 @Controller
 public class SpielController {
 
-    Feld[][] felder;   
+    Feld[][] felder;
+    Spieler p1;
+
 
     public SpielController(){
         setFelder(new Feld[6][7]);
         innitFeld();
         showTestfeld();
+        setP1(new Spieler(false));
     }
 
 
     @GetMapping("/spiel")
     public String spiel (@RequestParam(name="activePage", required = false, defaultValue = "spiel") String activePage, Model model){
+        
+        boolean winTrue = pruefe(true);
+        boolean winFalse = pruefe(false);
+
+        if(winTrue){
+            System.out.println("Spieler TRUE hat gewonnen!");
+        }
+
+        if(winFalse){
+            System.out.println("Spiler FALSE hat gewonnen!");
+        }
+        
         model.addAttribute("activePage", "spiel");
-        model.addAttribute("spiel");
-
-
+        model.addAttribute("felder", getFelder());
         return "index.html";
     }
 
@@ -35,7 +49,7 @@ public class SpielController {
             }
         }
 
-        // Demodaten 1. Reihe
+        /* Demodaten 1. Reihe
         getFelder()[0][0].setZustand(true);
         getFelder()[1][0].setZustand(true);
         getFelder()[2][0].setZustand(true);
@@ -45,6 +59,7 @@ public class SpielController {
         getFelder()[1][0].setIstFrei(false);
         getFelder()[2][0].setIstFrei(false);
         getFelder()[3][0].setIstFrei(false);
+        */
     }
 
     private void showTestfeld(){
@@ -56,12 +71,39 @@ public class SpielController {
         }     
     }
 
+    @GetMapping("/addstein")
+    public String addStein(@RequestParam(name="activePage", required = true, defaultValue = "spiel") String activePage, @RequestParam(name="id", required = true) int id, Model model){
+        for(int hoehe = 5; hoehe >= 0; hoehe--) {
+            if(getFelder()[hoehe][id].getIstFrei()) {
+                if(p1.getActiveplayer() == true) {
+                    getFelder()[hoehe][id].setIstFrei(false);
+                    getFelder()[hoehe][id].setZustand(true);
+                    p1.setActiveplayer(false);
+                    System.out.println("Feld " + hoehe + " " + id +" wurde geändert in O");  
+                    break;    
+                } 
+                else if(p1.getActiveplayer()== false) {
+                    getFelder()[hoehe][id].setIstFrei(false);
+                    getFelder()[hoehe][id].setZustand(false);
+                    p1.setActiveplayer(true);   
+                    System.out.println("Feld " + hoehe + " " + id +" wurde geändert in X");  
+                    break;              
+                }             
+            } 
+        }
+        pruefe(false);
+        pruefe(true);
+        return "redirect:/spiel";
+    }
+
     public boolean pruefe(boolean aufX){
         boolean pruefXo0 = aufX;
         boolean horizontal = false;
         boolean senkrecht = false;
         boolean diagonal = false;
         boolean windetected = false;
+
+        
 
         for(int i = 0; i < 6; i++){
             for(int k = 0; k < 4; k++){
@@ -108,11 +150,16 @@ public class SpielController {
         return windetected;
     }
 
-
     public void setFelder(Feld[][] felder) {
         this.felder = felder;
     }
     public Feld[][] getFelder() {
         return felder;
+    }
+    public void setP1(Spieler p1) {
+        this.p1 = p1;
+    }
+    public Spieler getP1() {
+        return p1;
     }
 }
